@@ -7,19 +7,21 @@
     <div class="row mb-2">
         {% for movie in movies %}
             <div class="col-md-6">
-                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <strong class="d-inline-block mb-2 text-success">{{ movie.type }}</strong>
-                        <h4 class="mb-0">{{ movie.title }}</h4>
-                        <div class="mb-1 text-muted">{{ movie.released }}</div>
-                        <p class="mb-auto">{{ movie.plot|truncatechars:70 }}</p>
-                        <a href="{{ movie.get_absolute_url }}" class="stretched-link">Continue reading</a>
+                <a href="{{ movie.get_absolute_url }}" class="stretched-link" style="text-decoration: none;color: inherit;">
+                    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-success">{{ movie.type }}</strong>
+                            <h4 class="mb-0">{{ movie.title }}</h4>
+                            <div class="mb-1 text-muted">{{ movie.released }}</div>
+                            <p class="mb-auto">{{ movie.plot|truncatechars:40 }}</p>
+
+                        </div>
+                        <div class="col-auto d-lg-block" style="margin: auto">
+                            <img class="bd-placeholder-img" width="120" height="120"
+                                 src="{{ movie.poster.url }}">
+                        </div>
                     </div>
-                    <div class="col-auto d-lg-block" style="margin: auto">
-                        <img class="bd-placeholder-img" width="200" height="200"
-                             src="{{ movie.poster.url }}">
-                    </div>
-                </div>
+                </a>
             </div>
 
         {% endfor %}
