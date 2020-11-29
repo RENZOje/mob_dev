@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+    <div class="row mb-2">
+        {% for movie in movies %}
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">{{ movie.type }}</strong>
+                        <h4 class="mb-0">{{ movie.title }}</h4>
+                        <div class="mb-1 text-muted">{{ movie.released }}</div>
+                        <p class="mb-auto">{{ movie.plot|truncatechars:70 }}</p>
+                        <a href="{{ movie.get_absolute_url }}" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-lg-block" style="margin: auto">
+                        <img class="bd-placeholder-img" width="200" height="200"
+                             src="{{ movie.poster.url }}">
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+
+        <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+
+                    <a class="blog-header-logo text-dark" href="{% url 'add_movie' %}" style="margin: auto">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd"
+                                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        Add film</a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <main role="main" class="container">
+        <div class="row">
+
+            <aside class="col-md-4 blog-sidebar">
+
+
+            </aside><!-- /.blog-sidebar -->
+
+        </div><!-- /.row -->
+
+    </main><!-- /.container -->
+
+{% endblock %}
