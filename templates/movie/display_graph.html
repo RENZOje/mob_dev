@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row no-gutters border rounded overflow-hidden">
+        <div class="btn-group" role="group" aria-label="Basic example" style="margin: auto">
+            <a href="{% url 'graph' %}">
+                <button type="button" class="btn btn-secondary">Graph</button>
+            </a>
+            <a href="{% url 'diagram' %}">
+                <button type="button" class="btn btn-secondary">Diagram</button>
+            </a>
+        </div>
+        <img src="data:image/png;base64,{{ data }}" alt="">
+
+        <form class="form-inline">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">z</span>
+                <input class="form-control" type="search" value="3" name="z" aria-describedby="basic-addon1">
+
+            </div>
+            <button class="btn btn-outline my-2 my-sm-0" type="submit" style="margin: auto">Render</button>
+        </form>
+
+    </div>
+{% endblock %}

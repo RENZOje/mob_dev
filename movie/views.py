@@ -3,6 +3,10 @@ from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 from .form import MovieForm
 from .models import Movie
+import numpy as np
+import matplotlib.pyplot as plt
+import io
+import urllib, base64
 
 import json
 
@@ -68,3 +72,63 @@ def delete_movie(request, pk):
     if request.method == 'GET':
         post.delete()
         return redirect('/')
+
+
+def display_graph1(request):
+    try:
+        if request.GET['z']:
+            z = int(request.GET['z'])
+    except:
+        z = 3
+
+    x = np.arange(-3, 3, 0.1)
+    y = x ** z
+    plt.title(f'y=x^{z}')
+    plt.grid(True)
+    plt.plot(x, y)
+
+    fig = plt.gcf()
+    fig.set_size_inches(3, 3)
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+
+    context = {'data': uri}
+    fig.clear()
+    return render(request, 'movie/display_graph.html', context)
+
+
+def display_graph2(request):
+    x = 30
+    y = 30
+    z = 40
+    try:
+        if request.GET['x'] and request.GET['y'] and request.GET['z']:
+            x = int(request.GET['x'])
+            y = int(request.GET['y'])
+            z = int(request.GET['z'])
+    except:
+        z = 30
+        y = 30
+        z = 40
+
+    size_of_groups = [x, y, z]
+    colors = ["orange", "green", "black"]
+    labels = [f'x = {x}', f'y= {y}', f'z = {z}']
+    plt.pie(size_of_groups, colors=colors, labels=labels)
+    my_circle = plt.Circle((0, 0), 0.7, color='white')
+    p = plt.gcf()
+    p.gca().add_artist(my_circle)
+    fig = plt.gcf()
+    fig.set_size_inches(3, 3)
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+
+    context = {'data': uri}
+    fig.clear()
+    return render(request, 'movie/display_graph2.html', context)
