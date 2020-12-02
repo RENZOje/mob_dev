@@ -10,16 +10,18 @@
                 <button type="button" class="btn btn-secondary">Diagram</button>
             </a>
         </div>
-        <img src="data:image/png;base64,{{ data }}" alt="">
+        <div class="row no-gutters border rounded overflow-hidden">
 
-        <form class="form-inline">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">z</span>
-                <input class="form-control" type="search" value="3" name="z" aria-describedby="basic-addon1">
+            <img src="data:image/png;base64,{{ data }}" alt="">
 
-            </div>
-            <button class="btn btn-outline my-2 my-sm-0" type="submit" style="margin: auto">Render</button>
-        </form>
+            <form class="form-inline">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">z</span>
+                    <input class="form-control" type="search" value="3" name="z" aria-describedby="basic-addon1">
 
+                </div>
+                <button class="btn btn-outline my-2 my-sm-0" type="submit" style="margin: auto">Render</button>
+            </form>
+        </div>
     </div>
 {% endblock %}

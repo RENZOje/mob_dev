@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
-from .form import MovieForm
-from .models import Movie
+from django.core.files.storage import default_storage
+from .form import MovieForm, CollageForm
+from .models import Movie, Collage
 import numpy as np
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
-
+from itertools import islice
 import json
 
 
@@ -72,6 +73,47 @@ def delete_movie(request, pk):
     if request.method == 'GET':
         post.delete()
         return redirect('/')
+
+
+def chunk(iterable, size):
+    it = iter(iterable)
+    item = list(islice(it, size))
+    while item:
+        yield item
+        item = list(islice(it, size))
+
+
+def collage(request):
+    form = CollageForm()
+    if request.method == 'POST':
+        form = CollageForm(request.POST, request.FILES)
+        obj = Collage.objects.first()
+        if form.is_valid():
+            file = request.FILES['image']
+            file_name = default_storage.save(file.name, file)
+            file_url = default_storage.url(file_name)
+            obj.list_obj['image'].append(file_url)
+            obj.save()
+
+    obj = Collage.objects.first()
+    list_default = obj.list_obj['image']
+    if len(list_default) % 6 != 0:
+        num = 6 - len(list_default) % 6
+        for i in range(0,num):
+            list_default.append('')
+
+    out_image = list(chunk(list_default,6))
+
+    context = {'form': form, 'out_image': out_image}
+
+    return render(request, 'movie/collage.html', context)
+
+def clear_collage(request):
+    obj = Collage.objects.first()
+    obj.list_obj = {'image':[]}
+    obj.save()
+
+    return redirect('collage')
 
 
 def display_graph1(request):

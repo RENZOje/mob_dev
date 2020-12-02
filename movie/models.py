@@ -30,3 +30,8 @@ class Movie(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+
+class Collage(models.Model):
+    list_obj = models.JSONField(default=dict)
+    image = models.ImageField()
