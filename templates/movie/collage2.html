@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block collage %}
+    <div class="row no-gutters border rounded overflow-hidden">
+        <div class="btn-group" role="group" aria-label="Basic example" style="margin: auto">
+            <a href="{% url 'collage' %}">
+                <button type="button" class="btn btn-secondary">Collage</button>
+            </a>
+            <a href="{% url 'collage_api' %}">
+                <button type="button" class="btn btn-secondary">Collage API</button>
+            </a>
+        </div>
+    </div>
+    <div class="row no-gutters border rounded overflow-hidden">
+    {% include 'movie/collage_include.html' %}
+        </div>
+
+{% endblock %}

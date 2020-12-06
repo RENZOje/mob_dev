@@ -10,7 +10,7 @@ import io
 import urllib, base64
 from itertools import islice
 import json
-
+import requests
 
 # Create your views here.
 def main_movie(request):
@@ -107,6 +107,23 @@ def collage(request):
     context = {'form': form, 'out_image': out_image}
 
     return render(request, 'movie/collage.html', context)
+
+def collage2(request):
+    json_answer  = json.loads(requests.get('https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=%E2%80%9Csmall+animals%E2%80%9D&image_type=photo&per_page=18').text)
+    print()
+
+    list_default = [x['webformatURL'] for x in json_answer['hits']]
+    if len(list_default) % 6 != 0:
+        num = 6 - len(list_default) % 6
+        for i in range(0,num):
+            list_default.append('')
+
+    out_image = list(chunk(list_default,6))
+
+    context = {'out_image': out_image}
+    return render(request, 'movie/collage2.html', context)
+
+
 
 def clear_collage(request):
     obj = Collage.objects.first()
