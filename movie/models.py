@@ -35,3 +35,29 @@ class Movie(models.Model):
 class Collage(models.Model):
     list_obj = models.JSONField(default=dict)
     image = models.ImageField()
+
+
+class MovieAPI(models.Model):
+    title = models.CharField(max_length=300)
+    year = models.CharField(max_length=50,default=2020)
+    imdbID = models.CharField(max_length=10, unique=True)
+    poster = models.CharField(max_length=1000)
+    rated = models.CharField(max_length=10)
+    released = models.CharField(max_length=50)
+    runtime = models.CharField(max_length=50)
+    genre = models.CharField(max_length=200)
+    director = models.CharField(max_length=200)
+    writer = models.CharField(max_length=200)
+    actors = models.CharField(max_length=200)
+    plot = models.TextField()
+    language = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
+    awards = models.CharField(max_length=200)
+    type = models.CharField(max_length=20)
+
+
+    def get_absolute_url(self):
+        return reverse('detail_movie_api', kwargs={'slug': self.imdbID})
+
+    def __str__(self):
+        return f'{self.title}'

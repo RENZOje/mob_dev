@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="left-ads-display col-lg-8">
+        <div class="row">
+            <div class="desc1-left col-md-6">
+                <img src="{{ movieapi.poster }}" class="img-fluid" alt="" style="margin: auto">
+            </div>
+            <div class="desc1-right col-md-6 pl-lg-4">
+                <h3 class="editContent" style="outline: none; cursor: inherit;">
+                    {{ movieapi.title }}
+                </h3>
+                <h5 class="editContent"></h5>
+                <ul>
+                    <li style="list-style: none">
+                        <span><b>Released:</b> {{ movieapi.released }}</span></li>
+                    <li style="list-style: none">
+                        <span><b>Country:</b> {{ movieapi.country }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Rated:</b> {{ movieapi.rated }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Runtime:</b> {{ movieapi.runtime }}</span>
+                    </li>
+
+                    <li style="list-style: none">
+                        <span><b>Genre:</b> {{ movieapi.genre }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Director:</b> {{ movieapi.director }}</span></li>
+                    <li style="list-style: none">
+                        <span><b>Writer:</b> {{ movieapi.writer }}</span></li>
+                    <li style="list-style: none">
+                        <span><b>Actors:</b> {{ movieapi.actors }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Plot:</b> {{ movieapi.plot }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Language:</b> {{ movieapi.language }}</span>
+                    </li>
+                    <li style="list-style: none">
+                        <span><b>Awards:</b> {{ movieapi.awards }}</span>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

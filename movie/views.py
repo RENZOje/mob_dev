@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 from django.core.files.storage import default_storage
 from .form import MovieForm, CollageForm
-from .models import Movie, Collage
+from .models import Movie, Collage, MovieAPI
 import numpy as np
 import matplotlib.pyplot as plt
 import io
@@ -11,6 +11,7 @@ import urllib, base64
 from itertools import islice
 import json
 import requests
+
 
 # Create your views here.
 def main_movie(request):
@@ -67,6 +68,10 @@ class MovieDetailView(DetailView):
     template_name = 'movie/movie_detail.html'
     slug_field = 'imdbID'
 
+class MovieDetailAPIView(DetailView):
+    model = MovieAPI
+    template_name = 'movie/movie_detail_api.html'
+    slug_field = 'imdbID'
 
 def delete_movie(request, pk):
     post = Movie.objects.get(id=pk)
@@ -99,35 +104,35 @@ def collage(request):
     list_default = obj.list_obj['image']
     if len(list_default) % 6 != 0:
         num = 6 - len(list_default) % 6
-        for i in range(0,num):
+        for i in range(0, num):
             list_default.append('')
 
-    out_image = list(chunk(list_default,6))
+    out_image = list(chunk(list_default, 6))
 
     context = {'form': form, 'out_image': out_image}
 
     return render(request, 'movie/collage.html', context)
 
+
 def collage2(request):
-    json_answer  = json.loads(requests.get('https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=%E2%80%9Csmall+animals%E2%80%9D&image_type=photo&per_page=18').text)
-    print()
+    json_answer = json.loads(requests.get(
+        'https://pixabay.com/api/?key=19193969-87191e5db266905fe8936d565&q=%E2%80%9Csmall+animals%E2%80%9D&image_type=photo&per_page=18').text)
 
     list_default = [x['webformatURL'] for x in json_answer['hits']]
     if len(list_default) % 6 != 0:
         num = 6 - len(list_default) % 6
-        for i in range(0,num):
+        for i in range(0, num):
             list_default.append('')
 
-    out_image = list(chunk(list_default,6))
+    out_image = list(chunk(list_default, 6))
 
     context = {'out_image': out_image}
     return render(request, 'movie/collage2.html', context)
 
 
-
 def clear_collage(request):
     obj = Collage.objects.first()
-    obj.list_obj = {'image':[]}
+    obj.list_obj = {'image': []}
     obj.save()
 
     return redirect('collage')
@@ -191,3 +196,51 @@ def display_graph2(request):
     context = {'data': uri}
     fig.clear()
     return render(request, 'movie/display_graph2.html', context)
+
+
+def main_movie_api(request):
+
+    try:
+        s = request.GET['s']
+    except:
+        s = ''
+        context = {'movies': ''}
+        return render(request, 'movie/main_api.html', context)
+
+
+    json_answer = json.loads(requests.get(f'http://www.omdbapi.com/?apikey=60e24274&s="{s}"&page=1').text)
+    movies = []
+    try:
+        for x in json_answer['Search']:
+            file = json.loads(requests.get(f'http://www.omdbapi.com/?apikey=60e24274&i={x["imdbID"]}').text)
+            try:
+                movie = MovieAPI.objects.create(title=file['Title'],
+                                             year=file['Year'],
+                                             imdbID=file['imdbID'],
+                                             poster=file['Poster'],
+                                             rated=file['Rated'],
+                                             released=file['Released'],
+                                             runtime=file['Runtime'],
+                                             genre=file['Genre'],
+                                             director=file['Director'],
+                                             writer=file['Writer'],
+                                             actors=file['Actors'],
+                                             plot=file['Plot'],
+                                             language=file['Language'],
+                                             country=file['Country'],
+                                             awards=file['Awards'],
+                                             type='movie')
+                movies.append(movie)
+            except:
+                movie = MovieAPI.objects.filter(imdbID=file['imdbID'])[0]
+                movies.append(movie)
+
+
+        context = {'movies': movies}
+
+        return render(request, 'movie/main_api.html', context)
+
+    except:
+
+        context = {'movies': movies}
+        return render(request, 'movie/main_api.html', context)

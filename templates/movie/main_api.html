@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="margin: auto"
+               name="s">
+        <button class="btn btn-outline my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <div class="row mb-2">
+        {% if movies %}
+
+
+            {% for movie in movies %}
+                <div class="col-md-6">
+                    <a href="{{ movie.get_absolute_url }}" class="stretched-link"
+                       style="text-decoration: none;color: inherit;">
+                        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-success">{{ movie.type }}</strong>
+                                <h4 class="mb-0">{{ movie.title }}</h4>
+                                <div class="mb-1 text-muted">{{ movie.released }}</div>
+                                <p class="mb-auto">{{ movie.plot|truncatechars:40 }}</p>
+
+                            </div>
+                            <div class="col-auto d-lg-block" style="margin: auto">
+                                <img class="bd-placeholder-img" width="120" height="120"
+                                     src="{{ movie.poster }}">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="margin: auto">
+            <h1 style="margin: auto; padding-left:30px; padding-right: 30px">No items found</h1>
+            </div>
+
+        {% endif %}
+    </div>
+
+    <main role="main" class="container">
+        <div class="row">
+
+            <aside class="col-md-4 blog-sidebar">
+
+
+            </aside><!-- /.blog-sidebar -->
+
+        </div><!-- /.row -->
+
+    </main><!-- /.container -->
+
+{% endblock %}
